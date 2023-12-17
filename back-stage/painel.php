@@ -10,8 +10,12 @@
                 <span class="info-box-text">Livros</span>
                       
                 <span class="info-box-number">
-              8
-                  <small></small>
+             <?php 
+             $livro=$pdo->prepare("select * from livros");
+             $livro->execute();
+             echo $livro->rowCount()
+             ?>
+                
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -24,10 +28,14 @@
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Pedidos</span>
+                <span class="info-box-text">Emprestimos</span>
             
         
-                <span class="info-box-number">1</span>
+                <span class="info-box-number"><?php 
+             $emprestimo=$pdo->prepare("select * from emprestimos");
+             $emprestimo->execute();
+             echo $emprestimo->rowCount()
+             ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -43,9 +51,13 @@
               <span class="info-box-icon bg-success elevation-1"><i class="fas fa-tag"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Arquivos</span>
+                <span class="info-box-text">Livros PDF</span>
           
-                <span class="info-box-number">20</span>
+                <span class="info-box-number"><?php 
+             $arquivos=$pdo->prepare("select * from arquivo");
+             $arquivos->execute();
+             echo $arquivos->rowCount()
+             ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -57,9 +69,13 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Membros</span>
+                <span class="info-box-text">Fornecedores</span>
                                                  
-                <span class="info-box-number">15</span>
+                <span class="info-box-number"><?php 
+             $fornecedores=$pdo->prepare("select * from fornecedores");
+             $fornecedores->execute();
+             echo $fornecedores->rowCount()
+             ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -110,14 +126,14 @@
               <span class="info-box-icon"><i class="fas fa-user"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Leitor</span>
-              <?php
-          /*$n=$pdo->prepare("select * from leitor");
+                <span class="info-box-text">Funcionários</span>
+        
+                <span class="info-box-number">      <?php
+         $n=$pdo->prepare("select * from funcionarios");
           $n->execute();
-          $c=$n->rowCount();
-       */
-          ?>
-                <span class="info-box-number">28</span>
+          echo$n->rowCount();
+    
+          ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -126,14 +142,14 @@
               <span class="info-box-icon"><i class="fa fa-tag"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Prateleiras</span>
-                     <?php
-         /* $n=$pdo->prepare("select * from prateleira");
+                <span class="info-box-text">Sugestões</span>
+                     
+                <span class="info-box-number"><?php
+         $n=$pdo->prepare("select * from sugestoes");
           $n->execute();
-          $c=$n->rowCount();*/
+          echo$n->rowCount();
        
-          ?>
-                <span class="info-box-number">9</span>
+          ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -143,7 +159,12 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">Downloads</span>
-                <span class="info-box-number">163,921</span>
+                <span class="info-box-number"><?php
+          $n=$pdo->prepare("select sum(download) as download from arquivo");
+          $n->execute();
+          $do=$n->fetch(PDO::FETCH_ASSOC);
+          echo $do['download'];
+          ?></span>
               </div>
           
             </div>
@@ -168,7 +189,7 @@
 
 <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Pedidos Efectuadas Resentemente</h3>
+                <h3 class="card-title">Emprestimos Recentes</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -183,21 +204,21 @@
               <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
                      <?php
-         /* $not=$pdo->prepare("select * from pedidos inner join livros on livros_idlivros=idlivros inner join leitor on leitor_idleitor=idleitor where estado_pedido='novo' limit 4");
+          $not=$pdo->prepare("select * from emprestimos e inner join livros l on(e.IDLivro=l.IDLivro) limit 4");
           $not->execute();
           $cont=$not->rowCount();
           while ($no=$not->fetch(PDO::FETCH_OBJ)) {
-           */
+        
           ?>
                   <li class="item">
                     <div class="product-img">
-                      <img src="../../img/<?php //echo $no->img;?>"  class="img-size-50">
+                      <img src="../img/<?php echo $no->file;?>"  class="img-size-50">
                     </div>
                     <div class="product-info">
-                      <a href="javascript:void(0)" class="product-title"><?php //echo $no->nome?>
+                      <a href="javascript:void(0)" class="product-title"><?php echo $no->utente?>
                         <span class="badge badge-warning float-right"></span></a>
                       <span class="product-description">
-                        Reservou <?php //echo $no->titulo;?> recentemente.
+                        <?php echo $no->titulo;?>
                
                       </span>
                       <a href="?url=painel&cancelar&cod=<?//=$no->idpedidos;?>"> <span class="badge badge-warning float-right">X</span></a>
@@ -205,7 +226,7 @@
                   </li>
                
                 <?php
-         //   }
+           }
         ?>
               
                 </ul>

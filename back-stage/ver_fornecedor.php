@@ -18,9 +18,9 @@ if (isset($_SESSION['alerta'])) {
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Livros Cadastrados </h3>
+                <h3 class="card-title">Fornecedores Cadastrados </h3>
                 <div class="card-tools">
-                <form action="?url=ver_prateleira" method="post">
+                <form action="?url=ver_fornecedor" method="post">
                   <div class="input-group input-group-sm" style="width: 300px;">
                     <input type="text" name="nome" class="form-control float-right" placeholder="procurar">
 
@@ -37,8 +37,9 @@ if (isset($_SESSION['alerta'])) {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Número</th>
-                      <th>Corredor</th>
+                      <th>Nome</th>
+                      <th>Contacto</th>
+                      <th>Endereço</th>
                       
                     </tr>
                   </thead>
@@ -48,7 +49,7 @@ if (isset($_SESSION['alerta'])) {
 
 
 $pagina=(isset($_GET['pag']))? $_GET['pag']:1;
-$q="select * from prateleira";
+$q="select * from Fornecedores";
 $sel=$pdo->prepare($q);
 $sel->execute();
 //contar o total de produtos
@@ -59,10 +60,10 @@ $numpag=ceil($total_resisto/$quantidade_pag);
 //calcuclando o inicio da visualização
 $inicio=($quantidade_pag*$pagina)-$quantidade_pag;
 
-@$nome=$_POST['nome'];
+$nome= isset($_POST['nome']) ? $_POST['nome']:"";
+$i=0;
 
-                    $i=0;
- $e="select * from prateleira  limit {$inicio},".$quantidade_pag;
+$e="select * from Fornecedores where Nome like'%$nome%' limit {$inicio},".$quantidade_pag;
                     $q=$pdo->prepare($e);
                     $q->execute();
                     while ($dados=$q->fetch(PDO::FETCH_OBJ)) {
@@ -71,12 +72,13 @@ $inicio=($quantidade_pag*$pagina)-$quantidade_pag;
                     <tr>
                       <td><?php echo$i=$i+1;?></td>
 
-                      <td><?php echo $dados->numero;?></td>
+                      <td><?php echo $dados->Nome;?></td>
                     
-                      <td><?php echo $dados->corredor;?></td>
+                      <td><?php echo $dados->Contato;?></td>
+                      <td><?php echo $dados->Endereco;?></td>
 
-                       <td><a href="?url=editarlivro&cod=<?=$dados->idlivros?>"> <button class="btn btn-primary"><i class="fa fa-edit"></i></button> </a></td>
-                      <td><a href="../../modelo/m_livro.php?url=eliminar&cod=<?=$dados->idlivros?>"> <button class="btn btn-danger"><i class="fa fa-trash"></i></button> </a></td>
+                       <td><a href="?url=editar_fornecedor&cod=<?=$dados->IDFornecedor?>"> <button class="btn btn-primary"><i class="fa fa-edit"></i></button> </a></td>
+                      <td><a onclick="return confirm('Deseja eliminar ?')" href="../controlo/controlo_fornecedor.php?url=eliminar&cod=<?=$dados->IDFornecedor?>"> <button class="btn btn-danger"><i class="fa fa-trash"></i></button> </a></td>
 
                     </tr>
                         <?php
@@ -99,7 +101,7 @@ $pag_posterior=$pagina+1;
 <li  class="page-item">
 <?php  if($pag_anterior!=0){?>
 
-<a class="page-link" href=" index.php?url=ver_prateleira&pag=<?php echo$pag_anterior;?>">&laquo;</a>
+<a class="page-link" href=" index.php?url=ver_fornecedor&pag=<?php echo$pag_anterior;?>">&laquo;</a>
 <?php  }else{?>
 <a class="page-link" href="#">&laquo;</a>
 <?php } ?>
@@ -117,13 +119,13 @@ if($i==$val){
   ?>
 
 
-<li class=" page-item active"><a class="page-link" href="index.php?url=ver_prateleira&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
+<li class=" page-item active"><a class="page-link" href="index.php?url=ver_fornecedor&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
 <?php }else{?>
-<li class="page-item"><a class="page-link" href="index.php?url=ver_prateleira&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
+<li class="page-item"><a class="page-link" href="index.php?url=ver_fornecedor&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
 <?php }}?>
 <li class="page-item">
 <?php  if($pag_posterior<=$numpag){?>
-<a class="page-link" href="?url=ver_prateleira&pag=<?php echo$pag_posterior;?>">&raquo;</a>
+<a class="page-link" href="?url=ver_fornecedor&pag=<?php echo$pag_posterior;?>">&raquo;</a>
 <?php  }else{?>
 <a class="page-link" href="#">&raquo;</a>
 <?php } ?>

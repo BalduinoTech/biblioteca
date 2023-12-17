@@ -22,7 +22,7 @@ public static function salvar($titulo,$autor,$categoria,$estado,$file,$ano,$prat
 	return $insert->execute() ? 1:0;
 }
 
-public static function editar($titulo,$autor,$categoria,$estado,$file,$ano,$prateleira,$editora):int{
+public static function editar($titulo,$autor,$categoria,$estado,$file,$ano,$prateleira,$editora,$id):int{
 
 	$ligar=conectar();
 

@@ -12,28 +12,26 @@
               <div class="card-body box-profile">
                 <div class="text-center">
                   <img class="profile-user-img img-fluid img-circle"
-                       src="../../img/<?php echo $dados['foto'];?>"
+                       src="../img/<?php echo $dados['Foto'];?>"
                        alt="User profile picture">
                 </div>
 
-                <h3 class="profile-username text-center"><?php echo $dados['nome'];?></h3>
+                <h3 class="profile-username text-center"><?php echo $dados['Nome'];?></h3>
 
                 <p class="text-muted text-center"></p>
 
                 <ul class="list-group list-group-unbordered mb-3">
+                 
                   <li class="list-group-item">
-                    <b>Estado</b> <a class="float-right"><?php echo $dados['estado'];?></a>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Nivel</b> <a class="float-right"><?php echo $dados['acesso'];?></a>
+                    <b>Nivel</b> <a class="float-right"><?php echo $dados['Cargo'];?></a>
                   </li>
                   <div class="list-group-item">
-                    <input type="hidden" name="id"  value="<?php echo $dados['idusuario'];?>">
+                    <input type="hidden" name="id"  value="<?php echo $dados['IDFuncionario'];?>">
                        <input name="t" type="file" class="form-control" required="" />
                   </div>
                 </ul>
 
-                <button type="submit" class="btn btn-primary btn-block">Editar</button> 
+                <!--<button type="submit" class="btn btn-primary btn-block">Editar</button>--> 
               </div>
               </form>
             </div>
@@ -63,13 +61,13 @@
                       <div class="form-group row">
                         <label for="inputName" class="col-sm-2 col-form-label">Nome</label>
                         <div class="col-sm-10">
-                          <input type="text" name="nome" class="form-control" id="inputName" value="<?php echo $dados['nome'];?>">
+                          <input type="text" name="nome" class="form-control" id="inputName" value="<?php echo $dados['Nome'];?>">
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                          <input type="email" name="email" class="form-control" id="inputEmail" value="<?php echo $dados['email'];?>" >
+                          <input type="email" name="email" class="form-control" id="inputEmail" value="<?php echo $dados['Email'];?>" >
                         </div>
                       </div>
                       <div class="form-group row">
@@ -79,12 +77,12 @@
                         </div>
                       </div>
                     
-                      <div class="form-group row">
+                     <!-- <div class="form-group row">
                         <label for="inputSkills" class="col-sm-2 col-form-label">Senha</label>
                         <div class="col-sm-10">
-                          <input type="text" name="senha" class="form-control" id="inputSkills" value="<?php echo $dados['senha'];?>">
+                          <input type="text" name="senha" class="form-control" id="inputSkills" value="<?php //echo $dados['Senha'];?>">
                         </div>
-                      </div>
+                      </div>-->
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10">
                           <div class="checkbox">
@@ -94,7 +92,7 @@
                       </div>
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10">
-                          <button type="submit" class="btn btn-danger">Editar</button>
+                          <!--<button type="submit" class="btn btn-danger">Editar</button>-->
                         </div>
                       </div>
                     </form>
@@ -120,7 +118,7 @@
 <!--Função responsável por alterar a foto do perfil-->
     <?php
     if(isset($_GET['cc'])){
-chmod ("../../img/", 777);
+chmod ("../img/", 777);
 $id=$_POST['id'];
 $extensao=strrchr($_FILES['t']['name'], ".");
 $nome2=substr($_FILES['t']['name'], 0,1);

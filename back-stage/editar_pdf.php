@@ -10,7 +10,7 @@ if(isset($_SESSION['alerta'])){
 }
 
 @$id=$_GET['cod'];
-$l=$pdo->prepare("select *from arquivos inner join livros on (livros_idlivros=idlivros) where idarquivos=$id");
+$l=$pdo->prepare("select * from arquivo a inner join livros  l on a.idlivro=l.IDLivro where idarquivo=$id");
 $l->execute();
 $livro=$l->fetch(PDO::FETCH_ASSOC);
 
@@ -24,11 +24,11 @@ $livro=$l->fetch(PDO::FETCH_ASSOC);
                 <h3 class="card-title">Carregar PDF</h3>
               </div>
               <div class="card-body">
-                <form action="?url=editarpdf&f=upload" method="post" enctype="multipart/form-data">
+                <form action="?url=<?=$_GET['url']?>&&cod=<?=$_GET['cod']?>&f=upload" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                   <label>Titulo</label>
 <input class="form-control" name="livro" required="" value="<?php echo$livro['titulo'];?>">
-<input type="hidden" name="id" required="" value="<?php echo$livro['idarquivos'];?>">
+<input type="hidden" name="id" required="" value="<?php echo$livro['idarquivo'];?>">
                     
                 </div>
                 
@@ -77,14 +77,14 @@ $id=$_POST['id'];
    $upload=rand(0,10000).$nome2.$extensao;
    
       
-$q="update arquivos set arquivo=? where idarquivos=?";
+$q="update arquivo set pdf=? where idarquivo=?";
 $insert=$pdo->prepare($q);
 $insert->bindParam(1,$upload);
 $insert->bindParam(2,$id);
 
 if($insert->execute()){
 
-  move_uploaded_file($_FILES['file']['tmp_name'], "../../arquivos/".$upload);
+  move_uploaded_file($_FILES['file']['tmp_name'], "../arquivos/".$upload);
 
 $_SESSION['alerta']='<div class="alert alert-success alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

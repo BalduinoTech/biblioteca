@@ -1,25 +1,53 @@
 <?php
-require_once'../conexao/conexao.php';
+session_start();
+require_once'../modelo/m_login.php';
+$login=new login();
 
-class autenticacao{
+if(isset($_GET['rota'])){
+$rota=$_GET['rota'];
+
+if($rota=="login"){
+
+if(isset($_POST['usuario'])&& isset($_POST['senha'])){
+	
+    $usuario=$_POST['usuario'];
+	
+    $senha=$_POST['senha'];
+	
+    $aut=$login->logar($usuario,$senha);
+
+    if(empty($aut)){
+
+    $_SESSION['alerta']='usuário ou senha errada';
+
+header("location:../");
+   
+
+    }else{
+
+    	$_SESSION['idusuario']=$aut['IDFuncionario'];
+    	
+        $_SESSION['nome']=$aut['Nome'];
+    	
+       // if($aut['perfil']=="MAT"){
+           
+         header("location:../back-stage/?url=painel");
+
+    	//}
 
 
-public function logar($nome,$senha){
 
-	$pdo=conectar();
-
-	$sql="select * from usuario where usuario=? and senha=?";
-	$busca=$pdo->prepare($sql);
-	$busca->bindParam(1,$nome);
-	$busca->bindParam(2,$senha);
-	$busca->execute();
-
-	$resultado=$busca->fetch(PDO::FETCH_ASSOC);
-	return $resultado; 
-
+    }
 
 }
+}
 
+if($rota=="sair"){
+unset($_SESSION['nome'],$_SESSION['idusuario']);
+session_destroy();
+header("location:../");
+
+}
 
 
 

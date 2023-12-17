@@ -18,9 +18,9 @@ if (isset($_SESSION['alerta'])) {
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Livros Cadastrados </h3>
+                <h3 class="card-title">Emprestimos</h3>
                 <div class="card-tools">
-                <form action="?url=ver_livro" method="post">
+                <form action="?url=ver_emprestimo" method="post">
                   <div class="input-group input-group-sm" style="width: 300px;">
                     <input type="text" name="nome" class="form-control float-right" placeholder="procurar">
 
@@ -39,10 +39,10 @@ if (isset($_SESSION['alerta'])) {
                       <th>#</th>
                    
                       <th>Titulo</th>
-                      <th>Autor/a</th>
-                      <th>Editora</th>
-                      <th>Prateleira</th>
-                      <th>Estado</th>
+                      <th>Utente</th>
+                      <th>Data</th>
+                      <th>Final</th>
+                      <th>Situação</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -51,7 +51,7 @@ if (isset($_SESSION['alerta'])) {
 
 
 $pagina=(isset($_GET['pag']))? $_GET['pag']:1;
-$q="select * from livros";
+$q="select * from emprestimos e inner join livros l on(e.IDLivro=l.IDLivro) ";
 $sel=$pdo->prepare($q);
 $sel->execute();
 //contar o total de produtos
@@ -64,33 +64,44 @@ $inicio=($quantidade_pag*$pagina)-$quantidade_pag;
 
 @$nome=$_POST['nome'];
 
-                    $i=0;
- $e="select * from livros where titulo like '%$nome%'  limit {$inicio},".$quantidade_pag;
-                    $q=$pdo->prepare($e);
-                    $q->execute();
-                    while ($dados=$q->fetch(PDO::FETCH_OBJ)) {
-                   
-                    ?> 
-                    <tr>
-                    
-                      <td> <img src="../img/<?php echo$dados->file;?>" width="60px"></td>
-                      <td><?php echo $dados->titulo;?></td>
-                      <td><?php echo $dados->autor;?></td>
-                      <td><span class="tag tag-success"><?php echo $dados->editora;?></span></td>
-                      <td><?php echo $dados->prateleira;?></td>
-                      <td><?php echo $dados->estado;?></td>
+$i=0;
+$e="select *,e.estado as situacao from emprestimos e inner join livros l on(e.IDLivro=l.IDLivro)  where titulo like '%$nome%'  limit {$inicio},".$quantidade_pag;
+$q=$pdo->prepare($e);
+$q->execute();
+while ($dados=$q->fetch(PDO::FETCH_OBJ)) {
 
-                       <td><a href="?url=editarlivro&cod=<?=$dados->IDLivro?>"> <button class="btn btn-primary"><i class="fa fa-edit"></i></button> </a></td>
-                      <td><a href="../controlo/controlo_livro.php?url=eliminar&cod=<?=$dados->IDLivro?>"> <button class="btn btn-danger"><i class="fa fa-trash"></i></button> </a></td>
+?> 
+<tr>
 
-                    </tr>
-                        <?php
-                 }
-                   ?>
-                 
-                  </tbody>
-                </table>
-              </div>
+<td> <img src="../img/<?php echo$dados->file;?>" width="60px"></td>
+<td><?php echo $dados->titulo;?></td>
+<td><?php echo $dados->utente;?></td>
+<td><?php echo $dados->DataEmprestimo;?></td>
+<td><?php echo $dados->DataDevolucaoPrevista;?></td>
+<?php if($dados->situacao=="CANCELADO") {?>
+<td><span class="badge badge-danger">Cancelado</span></td>
+<?php }else if($dados->situacao=="DEVOLVIDO"){?>
+<td><span class="badge badge-success"> Devolvido</span></td>
+<?php }else{?>
+<td><span class="badge badge-warning"> Não devolvido</span></td>
+<?php }    ?>
+
+<?php if($dados->situacao!="CANCELADO"){
+?>
+<td><a class="btn btn-primary btn-sm" href="?url=editarlivro&cod=<?=$dados->IDEmprestimo?>"> <i class="fa fa-edit"></i> </a></td>
+
+<td><a onclick="return confirm('Deseja cancelar ?')" href="../controlo/controlo_emprestimo.php?url=cancelar&cod=<?=$dados->IDEmprestimo?>"> <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> </a></td>
+
+
+<?php }?>
+</tr>
+<?php
+}
+?>
+
+</tbody>
+</table>
+</div>
               <!-- /.card-body -->
 
  <div class="card-footer clearfix">
@@ -104,7 +115,7 @@ $pag_posterior=$pagina+1;
 <li  class="page-item">
 <?php  if($pag_anterior!=0){?>
 
-<a class="page-link" href=" index.php?url=ver_livro&pag=<?php echo$pag_anterior;?>">&laquo;</a>
+<a class="page-link" href=" index.php?url=ver_emprestimo&pag=<?php echo$pag_anterior;?>">&laquo;</a>
 <?php  }else{?>
 <a class="page-link" href="#">&laquo;</a>
 <?php } ?>
@@ -122,13 +133,13 @@ if($i==$val){
   ?>
 
 
-<li class=" page-item active"><a class="page-link" href="index.php?url=ver_livro&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
+<li class=" page-item active"><a class="page-link" href="index.php?url=ver_emprestimo&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
 <?php }else{?>
-<li class="page-item"><a class="page-link" href="index.php?url=ver_livro&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
+<li class="page-item"><a class="page-link" href="index.php?url=ver_emprestimo&pag=<?php echo$i;?>" ><?php echo$i; ?></a></li>
 <?php }}?>
 <li class="page-item">
 <?php  if($pag_posterior<=$numpag){?>
-<a class="page-link" href="?url=ver_livro&pag=<?php echo$pag_posterior;?>">&raquo;</a>
+<a class="page-link" href="?url=ver_emprestimo&pag=<?php echo$pag_posterior;?>">&raquo;</a>
 <?php  }else{?>
 <a class="page-link" href="#">&raquo;</a>
 <?php } ?>

@@ -12,22 +12,31 @@ if (isset($_SESSION['alerta'])) {
 ?>
 <div class="card card-info">
               <div class="card-header" style="background-color: #4b545c;">
-                <h3 class="card-title">Cadastrar Prateleiras</h3>
+                <h3 class="card-title">Cadastrar Fornecedores</h3>
               </div>
               <div class="card-body">
-                <form action="../../modelo/m_prateleira.php?url=cadastrar" method="post">
+                <form action="../controlo/controlo_fornecedor.php?url=cadastrar" method="post">
                 <div class="form-group">
-                  <label>Numero</label>
-                  <input type="text" required="" name="numero" class="form-control">
+                  <label>Nome</label>
+                  <input type="text" required="" name="nome" class="form-control">
                 </div>
                 <!-- /.form group -->
 
                 <!-- Color Picker -->
                 <div class="form-group">
-                  <label>Corredor</label>
+                  <label>Contacto</label>
 
                   <div class="input-group my-colorpicker2">
-                    <input type="text" class="form-control" required="" name="corredor">
+                    <input type="text" class="form-control" required="" name="contacto">
+                  </div>
+                  <!-- /.input group -->
+                </div>
+
+                 <div class="form-group">
+                  <label>Endereço</label>
+
+                  <div class="input-group my-colorpicker2">
+                    <input type="text" class="form-control" required="" name="endereco">
                   </div>
                   <!-- /.input group -->
                 </div>

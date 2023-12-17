@@ -2,7 +2,7 @@
 session_start();
 require'../conexao/conexao.php';
 $pdo=conectar();
-/*
+
 if(!isset($_SESSION['idusuario']) or !isset($_SESSION['nome'])){
 
     $_SESSION['alerta']='<div class="alert alert-warning alert-dismissible">
@@ -11,16 +11,16 @@ if(!isset($_SESSION['idusuario']) or !isset($_SESSION['nome'])){
                   É necessário efectuar o login 
 
                 </div>';
-                header("location:../../visao/login.php");
+                header("location:../");
 }
 
 $idusuario=$_SESSION['idusuario'];
-$qs="select * from usuario where idusuario=$idusuario";
+$qs="select * from funcionarios where IDFuncionario=$idusuario";
 $sq=$pdo->prepare($qs);
 $sq->execute();
 $dados=$sq->fetch(PDO::FETCH_ASSOC);
 
-*/
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -118,7 +118,7 @@ while ($not=$no->fetch(PDO::FETCH_OBJ)) {
         </div>
       </li>
       <li class="nav-item">
-         <a href="../controlo/controlo_login.php?url=sair" onclick="return confirm('tem certeza que deseja sair?')" class="dropdown-item dropdown-footer">Terminar Sessão</a>
+         <a href="../controlo/controlo_login.php?rota=sair" onclick="return confirm('tem certeza que deseja sair?')" class="dropdown-item dropdown-footer">Terminar Sessão</a>
       </li>
       <li class="">
         <a class="nav-link" data-widget="#" data-slide="true" href="?url=perfil" style="color:red">
@@ -143,10 +143,10 @@ while ($not=$no->fetch(PDO::FETCH_OBJ)) {
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../img/<?php //echo $dados['foto'];?>" class="img-circle elevation-2" alt="User Image">
+          <img src="../img/<?= $dados['Foto'];?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?php// echo $dados['nome'];?></a>
+          <a href="#" class="d-block"><?php echo $dados['Nome'];?></a>
         </div>
       </div>
 
@@ -240,28 +240,28 @@ while ($not=$no->fetch(PDO::FETCH_OBJ)) {
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
               <p>
-                Pedidos
+                Emprestimo
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="?url=cad_pedido" class="nav-link">
+                <a href="?url=cad_emprestimo" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Registrar</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="?url=ver_pedido" class="nav-link">
+                <a href="?url=ver_emprestimo" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <?php 
-                 /* $dt=date('Y-m-d');
-                  $q="select * from pedidos where data_pedido='$dt'";
+                  $dt=date('Y-m-d');
+                  $q="select * from emprestimos where DataEmprestimo='$dt'";
                   $novo=$pdo->prepare($q);
-                  $novo->execute();*/
+                  $novo->execute();
 
                   ?>
-                  <span class="badge badge-success right"><?php //echo $novo->rowCount()?></span>
+                  <span class="badge badge-success right"><?php echo $novo->rowCount()?></span>
                   <p>Novos</p>
                 </a>
               </li>
@@ -284,21 +284,21 @@ while ($not=$no->fetch(PDO::FETCH_OBJ)) {
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
+              <i class="nav-icon fas fa-user"></i>
               <p>
-                Prateleiras
+               Fornecedor
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="?url=cad_prateleira" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="?url=cad_fornecedor" class="nav-link">
+                  <i class="far fa-user nav-icon"></i>
                   <p>Cadastrar</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="?url=ver_prateleira" class="nav-link">
+                <a href="?url=ver_fornecedor" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ver</p>
                 </a>
@@ -306,7 +306,7 @@ while ($not=$no->fetch(PDO::FETCH_OBJ)) {
              
             </ul>
           </li>
-          <li class="nav-item has-treeview">
+          <!--<li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
@@ -329,7 +329,7 @@ while ($not=$no->fetch(PDO::FETCH_OBJ)) {
               </li>
             
             </ul>
-          </li>
+          </li>-->
           
           
         </ul>
@@ -380,12 +380,12 @@ if($url=="cad_usuario"){
   include'editar_usuario.php';
 }
 
-if($url=="cad_prateleira"){
-  include("./cad_prateleira.php");
-}if($url=="ver_prateleira"){
-  include('./ver_prateleira.php');
-}if($url=="editar_prateleira"){
-  include('./editar_prateleira.php');
+if($url=="cad_fornecedor"){
+  include("./cad_fornecedor.php");
+}if($url=="ver_fornecedor"){
+  include('./ver_fornecedor.php');
+}if($url=="editar_fornecedor"){
+  include('./editar_fornecedor.php');
 }
 
 
@@ -398,12 +398,12 @@ if($url=="ver_leitor"){
   include('./editar_leitor.php');
 }
 
-if($url=="editar_pedido"){
-  include('./editar_pedido.php');
-}if($url=="cad_pedido"){
-  include('./cad_pedido.php');
-}if($url=="ver_pedido"){
-  include('./ver_pedidos.php');
+if($url=="editar_emprestimo"){
+  include('./editar_emprestimo.php');
+}if($url=="cad_emprestimo"){
+  include('./cad_emprestimo.php');
+}if($url=="ver_emprestimo"){
+  include('./ver_emprestimo.php');
 }
 
 

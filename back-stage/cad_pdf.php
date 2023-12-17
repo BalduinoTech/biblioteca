@@ -21,10 +21,10 @@ if(isset($_SESSION['alerta'])){
                   <select class="form-control" name="livro" required="">
                    <option value="">Selecione...</option>
                    <?php
-                   $q=$pdo->prepare("select * from livros order by idlivros DESC");
+                   $q=$pdo->prepare("select * from livros order by IDLivro DESC");
                    $q->execute();
                    while ($dados=$q->fetch(PDO::FETCH_OBJ)) {?>
-                    <option value="<?=$dados->idlivros;?>"><?php echo $dados->titulo?></option>
+                    <option value="<?=$dados->IDLivro;?>"><?php echo $dados->titulo?></option>
                   <?php }?>
                  </select> 
                 </div>
@@ -35,7 +35,7 @@ if(isset($_SESSION['alerta'])){
                     <label for="exampleInputFile">Arquivo PDF</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input type="file" name="file" required="" class="custom-file-input" id="exampleInputFile">
+                        <input type="file" name="file" accept=".pdf" required="" class="custom-file-input" id="exampleInputFile">
                         <label class="custom-file-label" for="exampleInputFile">Procurar</label>
                       </div>
                       <div class="input-group-append">
@@ -71,17 +71,17 @@ $livro=$_POST['livro'];
 
    $extensao=strrchr($_FILES['file']['name'], ".");
    $nome2=substr($_FILES['file']['name'], 0,1);
-   $upload=rand(0,10000).$nome2.$extensao;
+   $upload=rand(0,10000).date('s').$extensao;
    
       
-$q="insert into arquivos(arquivo,livros_idlivros) values(?,?)";
+$q="insert into arquivo(pdf,idlivro) values(?,?)";
 $insert=$pdo->prepare($q);
 $insert->bindParam(1,$upload);
 $insert->bindParam(2,$livro);
 
 if($insert->execute()){
 
-  move_uploaded_file($_FILES['file']['tmp_name'], "../../arquivos/".$upload);
+  move_uploaded_file($_FILES['file']['tmp_name'], "../arquivos/".$upload);
 
 $_SESSION['alerta']='<div class="alert alert-success alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
